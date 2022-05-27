@@ -11,11 +11,13 @@ export const initialUsersContextState: ContextStateType = {
   state: {
     users: []
   },
-  dispatch: (): void => {}
+  dispatch: (): void => {
+    console.log('---dispatch')
+  }
 }
 
 export enum EnumUsersContextActionType {
-  SET_USER = 'SET_USER'
+  SET_USERS = 'SET_USERS'
 }
 
 export interface EnumUsersContextAction {
@@ -28,7 +30,7 @@ export function usersContextReducer(
   action: EnumUsersContextAction
 ): ContextStateType {
   switch (action.type) {
-    case EnumUsersContextActionType.SET_USER:
+    case EnumUsersContextActionType.SET_USERS:
       return {
         ...state,
         state: {
@@ -50,7 +52,7 @@ export const UsersWithContext: FC<any> = ({ children }: any): JSX.Element => {
   )
 
   return (
-    <UsersContext.Provider value={{ state, dispatch }}>
+    <UsersContext.Provider value={{ ...state, dispatch }}>
       {children}
     </UsersContext.Provider>
   )

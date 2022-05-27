@@ -1,9 +1,5 @@
 import { FC } from 'react'
-import {
-  withFetch,
-  withFetchAndSkeleton,
-  withFetchAndSkeleton2
-} from './WithFetch'
+import { withFetch, withUsersContext, withFetchAndSkeleton2 } from './WithFetch'
 interface IProps {
   users: any[]
 }
@@ -22,5 +18,7 @@ export const Users: FC<IProps> = ({ users }: IProps): JSX.Element => {
   )
 }
 
-export const UsersWithFetch: any = withFetch(Users)
-export const UsersWithFetchAndSkeleton: any = withFetchAndSkeleton2(Users)
+export const UsersWithFetch: any = withUsersContext(withFetch(Users))
+export const UsersWithFetchAndSkeleton: any = withUsersContext(
+  withFetchAndSkeleton2(Users)
+)

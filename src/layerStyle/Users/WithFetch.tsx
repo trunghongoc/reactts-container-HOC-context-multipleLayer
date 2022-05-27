@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useContext } from 'react'
+import { useState, useEffect, useMemo, useContext, useCallback } from 'react'
 import axios from 'axios'
 import { WithSkeleton } from './WithSkeleton'
 import {
@@ -6,16 +6,6 @@ import {
   UsersWithContext,
   EnumUsersContextActionType
 } from './UsersContext'
-
-export const withUsersContext: any =
-  (Component: any): any =>
-  (withFetchProps: any): JSX.Element => {
-    return (
-      <UsersWithContext>
-        <Component {...withFetchProps} />
-      </UsersWithContext>
-    )
-  }
 
 export const withFetch: any =
   (Component: any): any =>
@@ -57,22 +47,43 @@ export const withFetchAndSkeleton: any =
     )
   }
 
+export const withUsersContext: any =
+  (Component: any): any =>
+  (withFetchProps: any): JSX.Element => {
+    return (
+      <UsersWithContext>
+        <Component {...withFetchProps} />
+      </UsersWithContext>
+    )
+  }
+
 export const withFetchAndSkeleton2: any =
   (Component: any): any =>
   (withFetchProps: any): JSX.Element => {
+    const { dispatch }: any = useContext(UsersContext)
+
     const [isFetching, setIsFetching] = useState<boolean>(true)
     const [users, setUsers] = useState<any[]>([])
 
     const UserSkeleton: any = useMemo((): any => WithSkeleton(Component), [])
 
-    useEffect((): void => {
+    const fetchUsers = useCallback((): void => {
       axios
         .get('https://jsonplaceholder.typicode.com/users')
         .then((response: any): void => {
           setIsFetching(false)
           setUsers(response.data)
+
+          dispatch({
+            type: EnumUsersContextActionType.SET_USERS,
+            payload: response.data
+          })
         })
-    }, [])
+    }, [dispatch])
+
+    useEffect((): void => {
+      fetchUsers()
+    }, [fetchUsers])
 
     return (
       <UserSkeleton {...withFetchProps} users={users} isFetching={isFetching} />
