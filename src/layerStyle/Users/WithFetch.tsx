@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useContext } from 'react'
-import { http } from 'http/index'
+import axios from 'axios'
 import { WithSkeleton } from './WithSkeleton'
 import {
   UsersContext,
@@ -24,7 +24,7 @@ export const withFetch: any =
     const [users, setUsers] = useState<any[]>([])
 
     useEffect((): void => {
-      http
+      axios
         .get('https://jsonplaceholder.typicode.com/users')
         .then((response: any): void => {
           setIsFetching(false)
@@ -44,7 +44,7 @@ export const withFetchAndSkeleton: any =
     const UserSkeleton: any = useMemo((): any => WithSkeleton(Component), [])
 
     useEffect((): void => {
-      http
+      axios
         .get('https://jsonplaceholder.typicode.com/users')
         .then((response: any): void => {
           setIsFetching(false)
@@ -66,7 +66,7 @@ export const withFetchAndSkeleton2: any =
     const UserSkeleton: any = useMemo((): any => WithSkeleton(Component), [])
 
     useEffect((): void => {
-      http
+      axios
         .get('https://jsonplaceholder.typicode.com/users')
         .then((response: any): void => {
           setIsFetching(false)
